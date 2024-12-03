@@ -5,8 +5,7 @@ void Main()
     var pattern = @"mul\(\d{1,3},\d{1,3}\)";
 	var sum = 0;
 	
-	
-	string line = File.ReadAllText(@"C:\EDF\adventofcode2024\03\input");
+	string line = File.ReadAllText(@"input");
    
 	MatchCollection matches = Regex.Matches(line, pattern);
     foreach (Match match in matches)

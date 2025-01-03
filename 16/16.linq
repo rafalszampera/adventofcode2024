@@ -6,7 +6,7 @@
 
 void Main()
 {
-    string file = File.ReadAllText(@"input");
+    string file = File.ReadAllText(@"C:\EDF\adventofcode2024\16\input");
 
     var map = file
         .Split(new string[] { "\r\n" }, StringSplitOptions.None)
@@ -26,35 +26,41 @@ void Main()
 
 void Step(char[][] map, int[][] cost, char move, int reindeer_x, int reindeer_y, int newCost)
 {	
-	if(!IsPointAccessible(map, reindeer_x, reindeer_y))
-		return;
+	var steps = new Queue<dynamic>() {('>', reindeer_x, reindeer_y, 0),('^', reindeer_x, reindeer_y, 1001), };
 	
-	if(cost[reindeer_x][reindeer_y] > newCost)
+	while(steps.Any())
 	{
-		cost[reindeer_x][reindeer_y] = newCost;
-		map[reindeer_x][reindeer_y] = move;
-	
-		if(move == '>') Step(map, cost, '>', reindeer_x, reindeer_y+1, newCost+1);
-		else Step(map, cost, '>', reindeer_x, reindeer_y+1, newCost+1001);		
+		var step = steps.Dequeue();
+		if(!IsPointAccessible(map, reindeer_x, reindeer_y))
+			continue;
 		
-		if(move == '<') Step(map, cost, '<', reindeer_x, reindeer_y-1, newCost+1);
-		else Step(map, cost, '<', reindeer_x, reindeer_y-1, newCost+1001);
-				
-		if(move == '^') Step(map, cost, '^', reindeer_x-1, reindeer_y, newCost+1);
-		else Step(map, cost, '^', reindeer_x-1, reindeer_y, newCost+1001);
-
-		if(move == 'v') Step(map, cost, 'v', reindeer_x+1, reindeer_y, newCost+1);
-		else Step(map, cost, 'v', reindeer_x+1, reindeer_y, newCost+1001);		
-	}
-	else if(cost[reindeer_x][reindeer_y] < newCost + 2004)
-	{	
-		if(move == '>') Step(map, cost, '>', reindeer_x, reindeer_y+1, newCost+1);
+		if(cost[reindeer_x][reindeer_y] > newCost)
+		{
+			cost[reindeer_x][reindeer_y] = newCost;
+			map[reindeer_x][reindeer_y] = move;
 		
-		if(move == '<') Step(map, cost, '<', reindeer_x, reindeer_y-1, newCost+1);
-				
-		if(move == '^') Step(map, cost, '^', reindeer_x-1, reindeer_y, newCost+1);
+			if(move == '>') Step(map, cost, '>', reindeer_x, reindeer_y+1, newCost+1);
+			else Step(map, cost, '>', reindeer_x, reindeer_y+1, newCost+1001);		
+			
+			if(move == '<') Step(map, cost, '<', reindeer_x, reindeer_y-1, newCost+1);
+			else Step(map, cost, '<', reindeer_x, reindeer_y-1, newCost+1001);
+					
+			if(move == '^') Step(map, cost, '^', reindeer_x-1, reindeer_y, newCost+1);
+			else Step(map, cost, '^', reindeer_x-1, reindeer_y, newCost+1001);
 
-		if(move == 'v') Step(map, cost, 'v', reindeer_x+1, reindeer_y, newCost+1);
+			if(move == 'v') Step(map, cost, 'v', reindeer_x+1, reindeer_y, newCost+1);
+			else Step(map, cost, 'v', reindeer_x+1, reindeer_y, newCost+1001);		
+		}
+		else if(cost[reindeer_x][reindeer_y] < newCost + 2004)
+		{	
+			if(move == '>') Step(map, cost, '>', reindeer_x, reindeer_y+1, newCost+1);
+			
+			if(move == '<') Step(map, cost, '<', reindeer_x, reindeer_y-1, newCost+1);
+					
+			if(move == '^') Step(map, cost, '^', reindeer_x-1, reindeer_y, newCost+1);
+
+			if(move == 'v') Step(map, cost, 'v', reindeer_x+1, reindeer_y, newCost+1);
+		}
 	}
 }
 
